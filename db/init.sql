@@ -1,16 +1,3 @@
--- -----------------------------
--- Creates database
--- -----------------------------
-CREATE DATABASE ebot;
-
--- -----------------------------
--- Creates tables
--- -----------------------------
--- CREATE TABLE accounts(
--- 	id SERIAL PRIMARY KEY,
--- 	type INT NOT NULL
--- );
-
 -- ----------------------------------------------------
 -- Table 'ebot'.'sellers'
 -- ----------------------------------------------------
@@ -27,7 +14,7 @@ CREATE TABLE sellers(
 -- ----------------------------------------------------
 CREATE TABLE categories(
 	id SERIAL PRIMARY KEY,
-	category_name VARCHAR(150) NOT NULL,
+	category_name VARCHAR(150) NOT NULL
 );
 
 -- ----------------------------------------------------
@@ -53,7 +40,6 @@ CREATE TABLE products(
 -- ----------------------------------------------------
 CREATE TABLE users(
 	id SERIAL PRIMARY KEY,
-	-- account_id INT references accounts(id) NOT NULL,
 	firstname VARCHAR(50) NOT NULL,
 	lastname VARCHAR(50) NOT NULL,
 	email TEXT NOT NULL,
@@ -62,9 +48,6 @@ CREATE TABLE users(
 );
 
 ALTER TABLE categories ADD product_id INT REFERENCES products(id);
-
--- ALTER TABLE sellers ADD account_id INT REFERENCES accounts(id);
-
 
 CREATE TABLE addresses(
 	id SERIAL PRIMARY KEY,
@@ -93,7 +76,7 @@ CREATE TABLE shippings(
 	shipping_method VARCHAR(250) NOT NULL,
 	shipping_charge MONEY NOT NULL,
 	shipping_estimated_delivery_day DATE
-	);
+);
 
 CREATE TABLE orders(
 	id SERIAL PRIMARY KEY,
@@ -106,4 +89,11 @@ CREATE TABLE orders(
 	total_amount MONEY NOT NULL
 );
 
-ALTER TABLE users ADD COLUMN creditcard_id INT REFERENCES credit_cards(id)
+ALTER TABLE users ADD COLUMN creditcard_id INT REFERENCES credit_cards(id);
+
+-- Seed data to prevent silent crashes when app queries empty tables
+INSERT INTO sellers (apiKey, store_name, email, password_) VALUES ('123', 'Sample Store', 'store@example.com', 'password');
+INSERT INTO categories (category_name) VALUES ('Sample Category');
+INSERT INTO products (product_name, seller_id, category_id, brand, url, price, old_price, image_url, availability, last_updated) 
+VALUES ('Sample Product', 1, 1, 'Sample Brand', 'http://example.com', 19.99, 29.99, 'http://example.com/image.jpg', true, CURRENT_DATE);
+INSERT INTO users (firstname, lastname, email, password_, username) VALUES ('Test', 'User', 'test@example.com', 'password', 'testuser');

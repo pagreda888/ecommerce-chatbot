@@ -1,11 +1,11 @@
 const { Client, Pool } = require('pg')
 
 const pool = new Pool({
-  user: 'jhonatan',
-  host: 'localhost',
-  database: 'ebot',
-  password: 'jhonatan',
-  port: 5432
+  user: process.env.DB_USER || 'jhonatan',
+  host: process.env.DB_HOST || 'localhost',
+  database: process.env.DB_NAME || 'ebot',
+  password: process.env.DB_PASSWORD || 'jhonatan',
+  port: process.env.DB_PORT || 5432
 });
 
 const getUsers = (request, response) => {

@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: ${DB_USER:-jhonatan}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-secret}
+      POSTGRES_DB: ${DB_NAME:-ebot}
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  app:
+    build: .
+    ports:
+      - "${PORT:-3000}:3000"
+    environment:
+      # If .env is missing, these provide fallback defaults that match db service
+      PORT: 3000
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: ${DB_NAME:-ebot}
+      DB_USER: ${DB_USER:-jhonatan}
+      DB_PASSWORD: ${DB_PASSWORD:-secret}
+    env_file:
+      - .env
+    depends_on:
+      - db
+    volumes:
+      - .:/app
+      # Exclude local node_modules so that the container native modules don't get overwritten
+      - /app/node_modules
