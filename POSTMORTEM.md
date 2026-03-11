@@ -18,3 +18,6 @@ Assuming an engineering cost of **$100/hr**, if 5 engineers onboard per month:
 ## What We Would Do Next
 **Upgrade the Node.js runtime to a modern LTS (e.g., Node 20) and replace `node-sass`**
 While Docker isolating the Node 8 environment makes it *runnable*, running an unsupported Node 8 environment is a massive security risk and makes introducing any external library nearly impossible because nothing modern compiles against Node 8 anymore. Upgrading the runtime is the single highest ROI action to make this project future-proof and safely extensible.
+
+**Add User Feedback on Account Creation to Prevent Duplicate Users**
+Currently, when a user creates an account, there is no loading state or success message indicator. This leads users to repeatedly click the "Create" button, assuming the action failed, which consequently creates multiple instances of the same user in the database. adding a simple loading spinner and a success redirect/message would eliminate this common source of database pollution and improve user experience.
